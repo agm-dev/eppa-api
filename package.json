@@ -1,0 +1,44 @@
+{
+  "name": "eppa-api",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">= 7.6.0"
+  },
+  "description": "Backend app to add and serve data about products from online stores",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "lint": "jshint .",
+    "validate": "npm ls",
+    "dev": "nodemon --exec \"npm run lint && npm run test && node index.js\"",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agm-dev/eppa-api.git"
+  },
+  "author": "Adrián Gonzalo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agm-dev/eppa-api/issues"
+  },
+  "homepage": "https://github.com/agm-dev/eppa-api#readme",
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "nodemon": "^1.17.1",
+    "precommit-hook": "^3.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.0.9",
+    "winston": "^3.0.0-rc2",
+    "winston-daily-rotate-file": "^1.7.2"
+  }
+}
