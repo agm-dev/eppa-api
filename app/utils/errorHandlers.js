@@ -76,3 +76,26 @@ exports.productionErrors = (err, req, res) => {
   res.status(err.status || 500);
   res.send(JSON.stringify(err.message));
 };
+
+/**
+ * Error handler function to wrap async/await calls:
+ * @param {*} fn
+ */
+exports.catchErrors = function (fn) {
+  return function (...params) {
+    return fn(...params).catch(function (err) {
+      logger.error(`catchError -> ${err.name}: ${err.message}`);
+    });
+  };
+};
+
+/**
+ * Express middleware to log request basic info:
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.logRequest = (req, res, next) => {
+  logger.info(`HTTP Request - ${req.method} - ${req.url} - ${req.headers['user-agent']}`);
+  next();
+};
