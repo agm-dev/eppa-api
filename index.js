@@ -9,15 +9,11 @@ require('dotenv').config();
 
 logger.info(`init`);
 
-const router = express.Router();
-router.get('/', (req, res) => {
-  res.send(process.env.APP_NAME || 'app');
-});
-
 // express set up:
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logRequest);
 app.use('/', router);
 app.use(notFound);
 
