@@ -1,7 +1,8 @@
 // requires:
 const express = require('express');
 const bodyParser = require('body-parser');
-const { notFound, developmentErrors, productionErrors  } = require('./app/utils/errorHandlers');
+const { notFound, developmentErrors, productionErrors, logRequest } = require('./app/utils/errorHandlers');
+const router = require('./app/routes/index');
 const logger = require('./app/utils/logger');
 
 require('dotenv').config();
