@@ -1,6 +1,12 @@
+const mongoose = require('mongoose');
+require('../models/Product');
+const Product = mongoose.model('Product');
+
+
 // TODO: temporal
-exports.getProducts = (req, res) => {
-  res.send('there is no products');
+exports.getProducts = async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
 };
 
 // TODO: temporal

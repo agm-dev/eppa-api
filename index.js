@@ -6,7 +6,6 @@ const { notFound, developmentErrors, productionErrors, logRequest } = require('.
 const router = require('./app/routes/index');
 const logger = require('./app/utils/logger');
 require('dotenv').config();
-require('./app/models/Product');
 
 
 logger.info(`init`);
