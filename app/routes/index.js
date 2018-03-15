@@ -24,6 +24,7 @@ router.get(`/api/product/v1/:slug`,
 );
 
 router.post(`/api/product/v1`,
+  productsController.validateInput,
   authController.isLogged,
   authController.canAddData,
   catchErrors(productsController.addProducts),
