@@ -88,6 +88,59 @@ exports.getProduct = async (req, res) => {
 
 // TODO: temporal
 exports.addProducts = async (req, res) => {
+  const products = req.body.products;
+  let errors = 0;
+  let processed = 0;
+  let created = 0;
+  let updated = 0;
+  for (let i=0; i<products.length; i++) {
+    const productData = formatProduct(products[i]);
+    if (productData === null) {
+      errors++;
+    } else {
+      // check if that product exists and update or create:
+      const product = await Product.findOne({ link: productData.link });
+      if (product) {
+        // update:
+        product.name = productData.name;
+        let price = { price: productData.price, currency: productData.currency };
+        if (typeof productData.discount !== 'undefined') price.discount = productData.discount;
+        product.prices.push(price);
+        if (typeof productData.image !== 'undefined') product.image = productData.image;
+        if (typeof productData.preorder !== 'undefined') product.preorder = productData.preorder;
+        if (typeof productData.platform !== 'undefined') product.platform = productData.platform;
+        if (typeof productData.region !== 'undefined') product.region = productData.region;
+        await product.save();
+        updated++;
+      } else {
+        // create:
+        productData.prices = [
+          { price: productData.price, currency: productData.currency }
+        ];
+        if (typeof productData.discount !== 'undefined') {
+          productData.prices[0].discount = productData.discount;
+          delete productData.discount;
+        }
+        delete productData.price;
+        delete productData.currency;
+        const newProduct = new Product(productData);
+        await newProduct.save();
+        created++;
+      }
+    }
+    processed++;
+  }
 
-  res.send('ok!');
+  // send response:
+  const result = {
+    processed,
+    success: processed - errors,
+    errors,
+    created,
+    updated,
+  };
+  logger.info(`request to add ${processed} products: ${result.success} success, ${errors} errors, ${created} created, ${updated} updated`);
+  res.status(201).json({ status: 'OK', message: 'Your products have been processed', result });
 };
+
+// TODO: add request model, controller, and validation, so requests require a random request id from the client, and we can identify the request
