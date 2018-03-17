@@ -1,8 +1,30 @@
 // requires:
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
+require('../models/Request');
+const Request = mongoose.model('Request');
 require('dotenv').config();
 
+
+/**
+ * Notes and aclarations:
+ *
+ * This request thing is to try to make the
+ * POST requests idempotent, as other methods
+ * like GET or UPDATE.
+ *
+ * We store the result of the first request
+ * in database, identified by request_id, so
+ * if we receive the same request (the same
+ * request_id) again in the POST request, we
+ * don't create another resource with the
+ * same data, but we just return the same
+ * response that we returned the first time,
+ * as other idempotent method (GET) would do.
+ *
+ * We only store request on successful POST
+ * requests.
+ */
 
 /**
  * Function to validate input data from http
@@ -25,6 +47,19 @@ exports.validateInput = (req, res, next) => {
   next();
 };
 
-exports.handleRequest = (req, res, next) => {
+/**
+ * Handles input request.
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.handleRequest = async (req, res, next) => {
+  const request = await Request.findOne({ request_id: req.body.request_id });
+  if (request) {
+    logger.info(`received same request with request_id ${request.request_id}, sending same successful response`);
+    request.retries++;
+    await request.save();
+    return res.status(201).json(request.response);
+  }
   next();
 };

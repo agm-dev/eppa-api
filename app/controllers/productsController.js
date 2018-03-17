@@ -1,7 +1,9 @@
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
 require('../models/Product');
+require('../models/Request');
 const Product = mongoose.model('Product');
+const Request = mongoose.model('Request');
 
 
 /**
@@ -140,7 +142,11 @@ exports.addProducts = async (req, res) => {
     updated,
   };
   logger.info(`request to add ${processed} products: ${result.success} success, ${errors} errors, ${created} created, ${updated} updated`);
-  res.status(201).json({ status: 'OK', message: 'Your products have been processed', result });
+  const response = { status: 'OK', message: 'Your products have been processed', result };
+  const request = new Request({
+    request_id: req.body.request_id,
+    response,
+  });
+  await request.save();
+  res.status(201).json(response);
 };
-
-// TODO: add request model, controller, and validation, so requests require a random request id from the client, and we can identify the request
