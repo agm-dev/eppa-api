@@ -4,6 +4,7 @@ const router = express.Router();
 const { catchErrors } = require('../utils/errorHandlers');
 const productsController = require('../controllers/productsController');
 const authController = require('../controllers/authController'); // temporal ''''auth'''' flow controller
+const requestController = require('../controllers/requestController');
 
 // Routes definition:
 router.get('/', (req, res) => {
@@ -25,8 +26,10 @@ router.get(`/api/product/v1/:slug`,
 
 router.post(`/api/product/v1`,
   productsController.validateInput,
+  requestController.validateInput,
   authController.isLogged,
   authController.canAddData,
+  catchErrors(requestController.handleRequest),
   catchErrors(productsController.addProducts),
 );
 
