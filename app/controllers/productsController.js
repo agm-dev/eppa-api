@@ -137,6 +137,14 @@ exports.addProducts = async (req, res) => {
         let price = { price: productData.price, currency: productData.currency };
         if (typeof productData.discount !== 'undefined') price.discount = productData.discount;
         product.prices.push(price);
+
+        if (productData.price < product.min_price) {
+          product.min_price = productData.price;
+        }
+        if (productData.price > product.max_price) {
+          product.max_price = productData.price;
+        }
+
         if (typeof productData.image !== 'undefined') product.image = productData.image;
         if (typeof productData.preorder !== 'undefined') product.preorder = productData.preorder;
         if (typeof productData.platform !== 'undefined') product.platform = productData.platform;
@@ -148,6 +156,8 @@ exports.addProducts = async (req, res) => {
         productData.prices = [
           { price: productData.price, currency: productData.currency }
         ];
+        productData.min_price = productData.price;
+        productData.max_price = productData.price;
         if (typeof productData.discount !== 'undefined') {
           productData.prices[0].discount = productData.discount;
           delete productData.discount;

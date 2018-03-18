@@ -37,6 +37,14 @@ const productSchema = new mongoose.Schema({
       },
     }
   ],
+  min_price: {
+    type: Number,
+    default: null,
+  },
+  max_price: {
+    type: Number,
+    default: null,
+  },
   region: {
     type: String,
     lowercase: true,
