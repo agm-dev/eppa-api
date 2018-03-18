@@ -1,7 +1,7 @@
 // requires:
 const express = require('express');
 const router = express.Router();
-const { catchErrors } = require('../utils/errorHandlers');
+const { catchExpressErrors } = require('../utils/errorHandlers');
 const productsController = require('../controllers/productsController');
 const authController = require('../controllers/authController'); // temporal ''''auth'''' flow controller
 const requestController = require('../controllers/requestController');
@@ -14,14 +14,14 @@ router.get('/', (req, res) => {
 // product:
 router.get(`/api/product/v1/`,
   authController.isLogged,
-  catchErrors(productsController.getProducts),
+  catchExpressErrors(productsController.getProducts),
 );
 
 // TODO: pagination, to be consumed by client app
 
 router.get(`/api/product/v1/:slug`,
   authController.isLogged,
-  catchErrors(productsController.getProduct),
+  catchExpressErrors(productsController.getProduct),
 );
 
 router.post(`/api/product/v1`,
@@ -29,8 +29,8 @@ router.post(`/api/product/v1`,
   productsController.validateInput,
   authController.isLogged,
   authController.canAddData,
-  catchErrors(requestController.handleRequest),
-  catchErrors(productsController.addProducts),
+  catchExpressErrors(requestController.handleRequest),
+  catchExpressErrors(productsController.addProducts),
 );
 
 // export:

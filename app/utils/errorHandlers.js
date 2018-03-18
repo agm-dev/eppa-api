@@ -90,6 +90,17 @@ exports.catchErrors = function (fn) {
 };
 
 /**
+ * Error handler function to wrap async/await calls
+ * with specific behavior for express middleware:
+ * @param {*} fn
+ */
+exports.catchExpressErrors = function (fn) {
+  return function (req, res, next) {
+    return fn(req, res, next).catch(next);
+  };
+};
+
+/**
  * Express middleware to log request basic info:
  * @param {*} req
  * @param {*} res
