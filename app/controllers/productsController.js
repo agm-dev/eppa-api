@@ -80,7 +80,7 @@ const formatProduct = rawProduct => {
 // TODO: temporal
 exports.getProducts = async (req, res) => {
   const products = await Product.find();
-  res.json(products);
+  res.json({ status: 'OK', message: `${products.length} products found`, results: [...products] });
 };
 
 // TODO: temporal
@@ -89,7 +89,7 @@ exports.getProduct = async (req, res) => {
   if (!product) {
     return res.status(404).json({ status: 'KO', message: 'Not found' });
   }
-  res.status(200).json({ status: 'OK', message: 'found', result: product });
+  res.status(200).json({ status: 'OK', message: 'found', results: [product] });
 };
 
 // TODO: temporal
