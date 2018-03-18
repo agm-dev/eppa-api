@@ -48,7 +48,7 @@ exports.developmentErrors = (err, req, res) => {
   };
   logger.error(`express developmentError: ${JSON.stringify(reqData)}`);
   res.status(err.status || 500);
-  res.send(JSON.stringify(errorDetails));
+  res.json(errorDetails);
 };
 
 /**
