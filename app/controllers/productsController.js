@@ -4,8 +4,12 @@ require('../models/Product');
 require('../models/Request');
 const Product = mongoose.model('Product');
 const Request = mongoose.model('Request');
+require('dotenv').config();
 
+
+// vars:
 const EXCLUDED_FIELDS = { _id: false, __v: false };
+const MAX_RESULTS = process.env.MAX_RESULTS ? parseInt(process.env.MAX_RESULTS) : 100;
 
 /**
  * Function to validate input data from http post request.
@@ -79,8 +83,29 @@ const formatProduct = rawProduct => {
 
 // TODO: temporal
 exports.getProducts = async (req, res) => {
-  const products = await Product.find();
-  res.json({ status: 'OK', message: `${products.length} products found`, results: [...products] });
+  const nProducts = await Product.count();
+  const nPages = Math.ceil(nProducts / MAX_RESULTS);
+  let page;
+  if (typeof req.body.page !== 'undefined' && req.body.page > 0) {
+    page = parseInt(req.body.page);
+  } else if (typeof req.query.page !== 'undefined' && req.query.page > 0) {
+    page = parseInt(req.query.page);
+  } else {
+    page = 1;
+  }
+  const skip = (page - 1) * MAX_RESULTS;
+  const products = await Product.find({}, EXCLUDED_FIELDS)
+    .sort({ created: -1 })
+    .skip(skip)
+    .limit(MAX_RESULTS);
+  res.json({
+    status: 'OK',
+    message: `Returning ${products.length} products from a total of ${nProducts} found`,
+    page,
+    pages: nPages,
+    total_products: nProducts,
+    results: [...products]
+  });
 };
 
 // TODO: temporal
