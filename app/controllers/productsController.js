@@ -136,7 +136,7 @@ exports.addProducts = async (req, res) => {
         product.name = productData.name;
         let price = { price: productData.price, currency: productData.currency };
         if (typeof productData.discount !== 'undefined') price.discount = productData.discount;
-        product.prices.push(price);
+        product.prices = [price, ...product.prices]; // this way product.prices[0] will be always the current price
 
         if (productData.price < product.min_price) {
           product.min_price = productData.price;
