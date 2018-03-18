@@ -5,6 +5,7 @@ require('../models/Request');
 const Product = mongoose.model('Product');
 const Request = mongoose.model('Request');
 
+const EXCLUDED_FIELDS = { _id: false, __v: false };
 
 /**
  * Function to validate input data from http post request.
@@ -84,8 +85,11 @@ exports.getProducts = async (req, res) => {
 
 // TODO: temporal
 exports.getProduct = async (req, res) => {
-  const product = await Product.find({ slug: 'test' });
-  res.send('there is no products');
+  const product = await Product.findOne({ slug: req.params.slug }, EXCLUDED_FIELDS);
+  if (!product) {
+    return res.status(404).json({ status: 'KO', message: 'Not found' });
+  }
+  res.status(200).json({ status: 'OK', message: 'found', result: product });
 };
 
 // TODO: temporal
