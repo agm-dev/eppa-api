@@ -93,7 +93,7 @@ productSchema.index({
 // pre saving hook to update 'updated' value and slug if required
 productSchema.pre('save', async function (next) {
   this.updated = new Date();
-  if (!this.isModified('name')) {
+  if (!this.isModified('name') && !this.isNew) {
     next();
     return;
   }
