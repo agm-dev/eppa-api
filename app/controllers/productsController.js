@@ -55,7 +55,9 @@ const formatProduct = rawProduct => {
   };
   // check if add discount field:
   if (typeof rawProduct.discount !== 'undefined') {
-    if (!isNaN(Number(rawProduct.discount))) {
+    if (rawProduct.discount === null) {
+      product.discount = 0;
+    } else if (!isNaN(Number(rawProduct.discount))) {
       product.discount = parseFloat(rawProduct.discount);
     } else if (typeof rawProduct.discount === 'string' && rawProduct.discount.indexOf('%') !== -1) {
       product.discount = parseFloat(rawProduct.discount.replace(/%|-/img, ''));
