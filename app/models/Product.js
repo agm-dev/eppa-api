@@ -99,12 +99,16 @@ productSchema.pre('save', async function (next) {
   }
   this.slug = slug(this.name);
   // but now we have to find for existen slugs...
-  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
-  const productsMatches = await this.constructor.find({ slug: slugRegEx });
-  if (productsMatches.length) {
-    // generate unique slug:
-    this.slug = `${this.slug}-${productsMatches.length + 1}`;
-  }
+  let iteration = 0;
+  do {
+    iteration++;
+    if (iteration > 1) {
+      // generate unique slug:
+      this.slug = `${this.slug}-${iteration}`;
+    }
+    let slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
+    let productsMatches = await this.constructor.find({ slug: slugRegEx });
+  } while (productsMatches.length);
   next(); // this is middleware, so let's continue...
 });
 
