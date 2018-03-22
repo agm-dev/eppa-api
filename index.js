@@ -18,6 +18,10 @@ mongoose.connection.on('error', err => {
   process.exit(1);
 });
 
+// require models after database connection:
+require('./app/models/Request');
+const Request = mongoose.model('Request');
+
 // express set up:
 const app = express();
 app.use(bodyParser.json());
@@ -39,3 +43,17 @@ app.set('port', process.env.PORT || 6666);
 const server = app.listen(app.get('port'), () => {
   logger.info(`app running on port ${server.address().port}`);
 });
+
+
+// interval to remove requests:
+const intervalToCheckRequests = (typeof process.env.MINUTES_INTERVAL_TO_CHECK_REQUESTS !== 'undefined') ? (parseInt(process.env.MINUTES_INTERVAL_TO_CHECK_REQUESTS) * 60 * 1000) : (10 * 60 * 1000); // value in miliseconds
+const ageToRemove = (typeof process.env.MINUTES_AGE_TO_REMOVE_REQUEST !== 'undefined') ? (parseInt(process.env.MINUTES_AGE_TO_REMOVE_REQUEST) * 60 * 1000) : 15 * 60 * 1000; // value in miliseconds
+
+const removeRequestsInterval = setInterval(() => {
+  const now = (new Date).getTime(); // now in miliseconds;
+  const targetDate = now - ageToRemove;
+  Request.removeOlderThan(targetDate, () => {
+    logger.info(`removed old requests`);
+  });
+}, intervalToCheckRequests);
+logger.info(`interval to check requests set each ${intervalToCheckRequests} miliseconds to remove requests older than ${ageToRemove} miliseconds`);

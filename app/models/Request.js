@@ -38,4 +38,9 @@ requestSchema.pre('save', async function (next) {
   next();
 });
 
+// static method to remove all requests old enough:
+requestSchema.statics.removeOlderThan = function (date, cb) {
+  this.deleteMany({ updated: { $lte: date } }, cb);
+}
+
 module.exports = mongoose.model('Request', requestSchema);
