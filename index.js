@@ -1,6 +1,7 @@
 // requires:
 const mongoose = require('mongoose');
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const { notFound, developmentErrors, productionErrors, logRequest } = require('./app/utils/errorHandlers');
 const router = require('./app/routes/index');
@@ -24,6 +25,7 @@ const Request = mongoose.model('Request');
 
 // express set up:
 const app = express();
+app.use(cors()); // FUCK CORS FUCK FUCK FUCK FUCK
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logRequest);
