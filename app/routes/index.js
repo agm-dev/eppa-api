@@ -17,14 +17,10 @@ router.get('/', (req, res) => {
 
 // product:
 router.get(`${apiPrefix}/product/v1/`,
-  authController.isLogged,
   catchExpressErrors(productsController.getProducts),
 );
 
-// TODO: pagination, to be consumed by client app
-
 router.get(`${apiPrefix}/product/v1/:slug`,
-  authController.isLogged,
   catchExpressErrors(productsController.getProduct),
 );
 
