@@ -5,6 +5,10 @@ const { catchExpressErrors } = require('../utils/errorHandlers');
 const productsController = require('../controllers/productsController');
 const authController = require('../controllers/authController'); // temporal ''''auth'''' flow controller
 const requestController = require('../controllers/requestController');
+require('dotenv').config();
+
+
+const apiPrefix = process.env.API_PREFIX || '/api';
 
 // Routes definition:
 router.get('/', (req, res) => {
@@ -12,19 +16,19 @@ router.get('/', (req, res) => {
 });
 
 // product:
-router.get(`/api/product/v1/`,
+router.get(`${apiPrefix}/product/v1/`,
   authController.isLogged,
   catchExpressErrors(productsController.getProducts),
 );
 
 // TODO: pagination, to be consumed by client app
 
-router.get(`/api/product/v1/:slug`,
+router.get(`${apiPrefix}/product/v1/:slug`,
   authController.isLogged,
   catchExpressErrors(productsController.getProduct),
 );
 
-router.post(`/api/product/v1`,
+router.post(`${apiPrefix}/product/v1`,
   requestController.validateInput,
   productsController.validateInput,
   authController.isLogged,
