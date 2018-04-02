@@ -12,12 +12,6 @@ const logger = require('./logger');
  * @param {*} next
  */
 exports.notFound = (req, res, next) => {
-  const reqData = {
-    userAgent: req.headers['user-agent'],
-    url: req.url,
-    method: req.method,
-  };
-  logger.error(`404 error: ${JSON.stringify(reqData)}`);
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -32,12 +26,12 @@ exports.notFound = (req, res, next) => {
  * @param {*} res
  * @param {*} next
  */
-exports.developmentErrors = (err, req, res) => {
+exports.developmentErrors = (err, req, res, next) => {
   err.stack = err.stack || '';
   const errorDetails = {
     message: err.message,
     status: err.status,
-    stackHighlighted: err.stack.replace(/[a-z_-\d]+.js:\d+:\d+/gi, '<mark>$&</mark>'),
+    stackHighlighted: err.stack.replace(/[a-z_-\d]+.js:\d+:\d+/gi, '<mark style="display:block;margin:5px;font-family:monospace;">$&</mark>'),
   };
   const reqData = {
     userAgent: req.headers['user-agent'],
@@ -48,7 +42,7 @@ exports.developmentErrors = (err, req, res) => {
   };
   logger.error(`express developmentError: ${JSON.stringify(reqData)}`);
   res.status(err.status || 500);
-  res.json(errorDetails);
+  res.send(errorDetails.stackHighlighted);
 };
 
 /**
@@ -60,7 +54,7 @@ exports.developmentErrors = (err, req, res) => {
  * @param {*} res
  * @param {*} next
  */
-exports.productionErrors = (err, req, res) => {
+exports.productionErrors = (err, req, res, next) => {
   const errorDetails = {
     message: err.message,
     status: err.status,
@@ -74,7 +68,7 @@ exports.productionErrors = (err, req, res) => {
   };
   logger.error(`express productionError: ${JSON.stringify(reqData)}`);
   res.status(err.status || 500);
-  res.send(JSON.stringify(err.message));
+  res.send(err.message);
 };
 
 /**
