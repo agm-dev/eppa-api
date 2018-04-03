@@ -100,7 +100,7 @@ exports.getProducts = async (req, res) => {
     .sort({ created: -1 })
     .skip(skip)
     .limit(MAX_RESULTS);
-  res.json({
+  res.status(200).json({
     status: 'OK',
     message: `Returning ${products.length} products from a total of ${nProducts} found`,
     page,
