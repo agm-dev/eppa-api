@@ -5,6 +5,7 @@ const { catchExpressErrors } = require('../utils/errorHandlers');
 const productsController = require('../controllers/productsController');
 const authController = require('../controllers/authController'); // temporal ''''auth'''' flow controller
 const requestController = require('../controllers/requestController');
+const searchController = require('../controllers/searchController');
 require('dotenv').config();
 
 
@@ -31,6 +32,12 @@ router.post(`${apiPrefix}/product/v1`,
   authController.canAddData,
   catchExpressErrors(requestController.handleRequest),
   catchExpressErrors(productsController.addProducts),
+);
+
+// search:
+router.get(`${apiPrefix}/search/v1`,
+  searchController.validateInput,
+  catchExpressErrors(searchController.searchBy),
 );
 
 // export:
