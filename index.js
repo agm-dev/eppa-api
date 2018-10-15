@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const { notFound, developmentErrors, productionErrors, logRequest } = require('./app/utils/errorHandlers');
 const router = require('./app/routes/index');
 const logger = require('./app/utils/logger');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 
 logger.info(`init`);
