@@ -13,7 +13,12 @@ require('dotenv').config({ path: path.join(__dirname, '.env') });
 logger.info(`init`);
 
 // database connection:
-mongoose.connect(process.env.DATABASE);
+const options = {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+};
+mongoose.connect(process.env.DATABASE, options);
 mongoose.Promise = global.Promise; // ES6 promises
 mongoose.connection.on('error', err => {
   logger.error(`mongoose connection: ${err.message}`);

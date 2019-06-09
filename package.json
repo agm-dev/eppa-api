@@ -27,9 +27,9 @@
     "test"
   ],
   "devDependencies": {
-    "ava": "^0.25.0",
-    "axios": "^0.18.0",
-    "nodemon": "^1.17.1",
+    "ava": "^2.0.0",
+    "axios": "^0.19.0",
+    "nodemon": "^1.19.1",
     "precommit-hook": "^3.0.0",
     "standard": "^11.0.0"
   },
@@ -39,8 +39,8 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.0",
-    "mongoose": "^5.0.9",
-    "slug": "^0.9.1",
+    "mongoose": "^5.5.14",
+    "slug": "^1.1.0",
     "winston": "2.4.1",
     "winston-daily-rotate-file": "^1.7.2"
   }
