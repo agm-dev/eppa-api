@@ -39,7 +39,7 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.0",
-    "mongoose": "^5.5.14",
+    "mongoose": "^5.7.5",
     "slug": "^1.1.0",
     "winston": "2.4.1",
     "winston-daily-rotate-file": "^1.7.2"
